@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📱 Analisis Usaha Tani - King Mamank</title>
+
+<style>
+* {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(to bottom, #0f2027, #203a43);
+  margin: 0;
+  color: #e0e0e0;
+}
+
+.container {
+  max-width: 450px;
+  margin: auto;
+  padding: 15px;
+}
+
+.card {
+  background: #1e1e1e;
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+h2 {
+  text-align: center;
+  color: #81c784;
+}
+
+h4 {
+  text-align: center;
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #2a2a2a;
+  color: #fff;
+}
+
+input:focus, select:focus {
+  border-color: #66bb6a;
+  background: #333;
+  outline: none;
+}
+
+h3 {
+  color: #66bb6a;
+  font-size: 15px;
+  border-left: 4px solid #66bb6a;
+  padding-left: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2e7d32, #66bb6a);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.hasil {
+  margin-top: 20px;
+  padding: 18px;
+  background: #263238;
+  border-radius: 15px;
+  border: 1px solid #388e3c;
+}
+
+.error {
+  color: #ff5252;
+  font-size: 12px;
+  display: none;
+}
+
+.highlight {
+  color: #81c784;
+  font-weight: bold;
+}
+
+.big {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* TOMBOL HOME MELAYANG */
+/* TOMBOL HOME MELAYANG DI KIRI ATAS */
+.btn-home {
+  position: fixed; /* Tetap di posisi meski layar di-scroll */
+  top: 15px;      /* Jarak dari atas */
+  left: 15px;     /* Jarak dari kiri */
+  background: var(--primary);
+  color: #121212;
+  width: 45px;    /* Sedikit diperkecil agar lebih rapi di atas */
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  z-index: 10000; /* Pastikan selalu di depan */
+  transition: all 0.3s ease;
+  border: 2px solid white;
+}
+
+.btn-home:active {
+  transform: scale(0.9);
+}
+
+/* animasi pulse */
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgba(102,187,106,0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(102,187,106,0); }
+  100% { box-shadow: 0 0 0 0 rgba(102,187,106,0); }
+}
+
+.btn-home {
+  animation: pulse-green 2s infinite;
+}
+</style>
+</head>
+<a href="https://mamank757.github.io/PPL/" class="btn-home" title="Kembali ke Home">🏠</a>
+<body>
+
+<div class="container">
+<div class="card">
+
+<h2>📱 Analisis Usaha Tani</h2>
+<h4>Menghitung Kebutuhan, Keuntungan dan Perencanaan</h4>
+
+<label>Luas Lahan (Ha)</label>
+<input type="number" id="luas" step="0.01" min="0" placeholder="Contoh: 1.5">
+<small id="errLuas" class="error">❗ Wajib angka & tidak boleh kosong</small>
+
+<h3>1. Benih & Pupuk</h3>
+
+<label>Sistem Tanam</label>
+<select id="sistem">
+<option value="tapin">Tapin (25 kg/Ha)</option>
+<option value="tabela">Tabela (45 kg/Ha)</option>
+</select>
+
+<label>Dosis Urea (kg/Ha)</label>
+<select id="dosisUrea">
+<option>50</option><option>75</option><option>100</option>
+<option>125</option><option>150</option><option selected>175</option>
+<option>200</option><option>225</option><option>250</option>
+<option>275</option><option>300</option><option>325</option>
+<option>350</option><option>375</option><option>400</option>
+</select>
+
+<label>Dosis NPK (kg/Ha)</label>
+<select id="dosisNPK">
+<option>50</option><option>75</option><option>100</option>
+<option>125</option><option>150</option><option>175</option>
+<option>200</option><option>225</option><option>250</option>
+<option>275</option><option>300</option><option>325</option>
+<option>350</option><option selected>375</option><option>400</option>
+</select>
+
+<h3>2. Biaya Lain (Jumlah Rp)</h3>
+
+<input type="text" id="pestisida" placeholder="Pestisida, Booster, atau bahan lainnya" oninput="formatRupiah(this)">
+<input type="text" id="tenaga_olah" placeholder="Olah Lahan (Traktor/Bajak sawah)" oninput="formatRupiah(this)">
+<input type="text" id="tenaga_panen" placeholder="Panen/Pasca Panen (Combine, Biaya angkutan, dsb.)" oninput="formatRupiah(this)">
+<input type="text" id="lain" placeholder="Lainnya" oninput="formatRupiah(this)">
+
+<h3>3. Hasil</h3>
+
+<input type="number" id="hasil" placeholder="Produksi (Kg) Cth. 6 Ton: 6000">
+<input type="text" id="harga" placeholder="Harga Gabah (Rp) Cth: 6.500" oninput="formatRupiah(this)">
+
+<button onclick="hitung()">Hitung</button>
+
+<div class="hasil" id="output" style="display:none;"></div>
+
+<button id="btnWA" style="display:none; margin-top:10px;" onclick="kirimWA()">
+📲 Kirim ke WhatsApp
+</button>
+<footer style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 0px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+">
+  <div class="footer">
+  © 2026 Dibuat oleh:<br>
+  <strong>King Mamank</strong> • PPL BPP Bola - Kab. Wajo - Sulsel
+</div>
+</footer>
+<script>
+function formatRupiah(el){
+    let angka = el.value.replace(/[^0-9]/g, "");
+    el.value = angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function sak(kg){
+    return (Math.round(kg/25)/2).toFixed(1);
+}
+
+function rupiah(x){
+    return "Rp " + Math.round(x).toLocaleString("id-ID");
+}
+
+let pesanWA = "";
+
+function hitung(){
+    let luas = parseFloat(document.getElementById("luas").value);
+
+    if(isNaN(luas) || luas <= 0){
+        document.getElementById("errLuas").style.display = "block";
+        return;
+    } else {
+        document.getElementById("errLuas").style.display = "none";
+    }
+
+    let hasil = parseFloat(document.getElementById("hasil").value);
+    let harga = parseFloat(document.getElementById("harga").value.replace(/\./g,""));
+
+    if(!hasil || !harga){
+        alert("❗ Isi produksi & harga terlebih dahulu!");
+        return;
+    }
+
+    let sistem = document.getElementById("sistem").value;
+    let benih = (sistem === "tapin") ? 25 : 45;
+
+    let totalBenih = luas * benih;
+    let biayaBenih = totalBenih * 18500;
+
+    let urea = luas * parseFloat(document.getElementById("dosisUrea").value);
+    let npk = luas * parseFloat(document.getElementById("dosisNPK").value);
+
+    let biayaUrea = urea * 1800;
+    let biayaNPK = npk * 1840;
+
+    let pest = parseFloat(document.getElementById("pestisida").value.replace(/\./g,"")) || 0;
+    let olah = parseFloat(document.getElementById("tenaga_olah").value.replace(/\./g,"")) || 0;
+    let panen = parseFloat(document.getElementById("tenaga_panen").value.replace(/\./g,"")) || 0;
+    let biayaLain = parseFloat(document.getElementById("lain").value.replace(/\./g,"")) || 0;
+
+    let totalBiaya = biayaBenih + biayaUrea + biayaNPK + pest + olah + panen + biayaLain;
+    let pendapatan = hasil * harga;
+    let untung = pendapatan - totalBiaya;
+    let rc = (pendapatan / totalBiaya).toFixed(2);
+
+    let status = "";
+    if(rc < 1) status = "❌ Rugi";
+    else if(rc < 2) status = "⚠️ Rendah";
+    else if(rc < 4) status = "✅ Layak";
+    else status = "🔥 Sangat Menguntungkan";
+
+    let html = `
+    <h3>📊 Hasil Analisis</h3>
+
+    🌾 Benih: ${totalBenih.toFixed(1)} kg<br>
+    Biaya: ${rupiah(biayaBenih)}<br><br>
+
+    🧪 Urea: ${urea.toFixed(0)} kg (${sak(urea)} sak)<br>
+    🧪 NPK: ${npk.toFixed(0)} kg (${sak(npk)} sak)<br><br>
+
+    💰 Total Biaya:<br>
+    <span style="color:#ef5350">${rupiah(totalBiaya)}</span><br><br>
+
+    💵 Pendapatan:<br>
+    <span class="highlight">${rupiah(pendapatan)}</span><br><br>
+
+    💵 Keuntungan:<br>
+    <span class="big highlight">${rupiah(untung)}</span><br><br>
+
+    📈 R/C Ratio: <b>${rc}</b><br>
+    Status: <b>${status}</b>
+    `;
+
+    pesanWA = `
+📊 ANALISIS USAHA TANI
+
+Luas Lahan: ${luas} Ha
+
+🌾 Benih: ${totalBenih.toFixed(1)} kg
+🧪 Urea: ${urea.toFixed(0)} kg (${sak(urea)} sak)
+🧪 NPK: ${npk.toFixed(0)} kg (${sak(npk)} sak)
+
+💰 Total Biaya: ${rupiah(totalBiaya)}
+💵 Pendapatan: ${rupiah(pendapatan)}
+💵 Keuntungan: ${rupiah(untung)}
+
+📈 R/C Ratio: ${rc}
+Status: ${status}
+
+— oleh King Mamank
+`;
+
+    let out = document.getElementById("output");
+    out.style.display = "block";
+    out.innerHTML = html;
+
+    document.getElementById("btnWA").style.display = "block";
+}
+
+function kirimWA(){
+    if(!pesanWA){
+        alert("Hitung dulu sebelum kirim!");
+        return;
+    }
+
+    let url = "https://wa.me/?text=" + encodeURIComponent(pesanWA);
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
